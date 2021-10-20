@@ -9,6 +9,7 @@ wallTextures = {
     '2': pygame.image.load('textures/obsidean.jpg'),
     '3': pygame.image.load('textures/window.png'),
     '4': pygame.image.load('textures/pumpkin.jpg'),
+    '5': pygame.image.load('textures/leaf.jpg'),
 }
 
 
@@ -192,6 +193,7 @@ class Game(object):
 
         isRunning = True
         while isRunning:
+            
 
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
