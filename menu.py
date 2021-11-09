@@ -2,8 +2,9 @@ import pygame
 import sys
 from pygame.locals import *
 from raycaster import Game
+from map_textures import *
 
-width = 1000
+width = 500
 height = 500
 
 background = pygame.image.load('background.jpg')
@@ -16,9 +17,9 @@ class Menu(object):
 
         self.mainClock = pygame.time.Clock()
         pygame.init()
-        pygame.display.set_caption('Main Menu')
+        pygame.display.set_caption('Andrei Portales 19825')
         self.screen = pygame.display.set_mode(
-            (width, height), pygame.DOUBLEBUF | pygame.HWACCEL)
+            (width, height), pygame.DOUBLEBUF | pygame.HWACCEL | pygame.HWSURFACE)
         self.screen.set_alpha(None)
 
         self.titleFont = pygame.font.SysFont("Arial", 60)
@@ -50,54 +51,100 @@ class Menu(object):
                                                   border-i, width+5, height+5), 1)
         return surf
 
+    def play_music(self):
+        pygame.mixer.music.load('audios/menu.mp3')
+        pygame.mixer.music.play(-1)
+
     def start(self):
+        
+        self.play_music()
 
         while 1:
 
             self.screen.fill((0, 0, 0))
             self.draw_background()
-            self.draw_text('Main menu', self.titleFont,
-                           (255, 255, 255), self.screen, 360, 50)
+            self.draw_text('Main menu', self.titleFont,(255, 255, 255), self.screen, 150, 50)
 
             mx, my = pygame.mouse.get_pos()
 
-            button_1 = pygame.Rect(190, 250, 200, 75)
-            button_2 = pygame.Rect(560, 250, 200, 75)
+            # Buttons
+            button_level_1 = pygame.Rect(15, 250, 150, 75)  # Level 1 Button
+            button_level_2 = pygame.Rect(175, 250, 150, 75)  # Level 2 Button
+            button_level_3 = pygame.Rect(335, 250, 150, 75)  # Level 3 Button
+            button_exit = pygame.Rect(170, 375, 150, 75)  # Exit button
 
-            button_1_is_hover = False
-            button_2_is_hover = False
+            button_level_1_is_hover = False
+            button_level_2_is_hover = False
+            button_level_3_is_hover = False
+            button_exit_is_hover = False
 
-            if button_1.collidepoint((mx, my)):
+            if button_level_1.collidepoint((mx, my)):  # Nivel 1
                 if self.click:
-                    Game(self.screen, self.mainClock, width, height)
+                    pygame.mixer.music.stop()
+                    Game(self.screen, self.mainClock, width,
+                         height, 'maps/map.txt', map_textures1, 'audios/nivel1.mp3')
+                    self.play_music()
 
                 elif self.mouse_hover:
-                    button_1_is_hover = True
+                    button_level_1_is_hover = True
 
-            if button_2.collidepoint((mx, my)):
+            if button_level_2.collidepoint((mx, my)):  # Nivel 2
+                if self.click:
+                    pygame.mixer.music.stop()
+                    Game(self.screen, self.mainClock, width,
+                         height, 'maps/map1.txt', map_textures2, 'audios/nivel2.mp3')
+                    self.play_music()
+
+                elif self.mouse_hover:
+                    button_level_1_is_hover = True
+
+            if button_level_3.collidepoint((mx, my)):  # Nivel 3
+                if self.click:
+                    pygame.mixer.music.stop()
+                    Game(self.screen, self.mainClock, width, height, 'maps/map2.txt', map_textures3, 'audios/nivel3.mp3')
+                    self.play_music()
+
+                elif self.mouse_hover:
+                    button_level_1_is_hover = True
+
+            if button_exit.collidepoint((mx, my)):
                 if self.click:
                     pygame.quit()
                     sys.exit()
                 elif self.mouse_hover:
-                    button_2_is_hover = True
+                    button_exit_is_hover = True
 
             button_color = (255, 255, 255)
             button_color_hover = (200, 200, 200)
 
-            button_1_color = button_color if button_1_is_hover or self.currentButton == 0 else button_color_hover
-            button_2_color = button_color if button_2_is_hover or self.currentButton == 1 else button_color_hover
+            button_level_1_color = button_color if button_level_1_is_hover or self.currentButton == 0 else button_color_hover
+            button_level_2_color = button_color if button_level_2_is_hover or self.currentButton == 1 else button_color_hover
+            button_level_3_color = button_color if button_level_3_is_hover or self.currentButton == 2 else button_color_hover
+            button_exit_color = button_color if button_exit_is_hover or self.currentButton == 3 else button_color_hover
 
-            # Start button
-            pygame.draw.rect(self.screen, button_1_color,
-                             button_1,  border_radius=10)
-            self.draw_text('Start', self.buttonFont,
-                           (0, 0, 0), self.screen, 250, 265)
+            # Nivel 1 Button
+            pygame.draw.rect(self.screen, button_level_1_color,
+                             button_level_1,  border_radius=10)
+            self.draw_text('Nivel 1', self.buttonFont,
+                           (0, 0, 0), self.screen, 45, 265)
+
+            # Nivel 2 Button
+            pygame.draw.rect(self.screen, button_level_2_color,
+                             button_level_2,  border_radius=10)
+            self.draw_text('Nivel 2', self.buttonFont,
+                           (0, 0, 0), self.screen, 200, 265)
+
+            # Nivel 3 Button
+            pygame.draw.rect(self.screen, button_level_3_color,
+                             button_level_3,  border_radius=10)
+            self.draw_text('Nivel 3', self.buttonFont,
+                           (0, 0, 0), self.screen, 365, 265)
 
             # Exit button
-            pygame.draw.rect(self.screen, button_2_color,
-                             button_2,  border_radius=10)
+            pygame.draw.rect(self.screen, button_exit_color,
+                             button_exit,  border_radius=10)
             self.draw_text('Exit', self.buttonFont,
-                           (0, 0, 0), self.screen, 630, 265)
+                           (0, 0, 0), self.screen, 215, 390)
 
             self.click = False
             self.mouse_hover = False
@@ -110,13 +157,20 @@ class Menu(object):
                 elif event.type == KEYDOWN:
 
                     if event.key == K_RIGHT:
-                        self.currentButton = 1
+                        self.currentButton = (self.currentButton + 1) % 4
                     elif event.key == K_LEFT:
-                        self.currentButton = 0
+                        self.currentButton = (self.currentButton - 1) % 4
+
                     elif event.key == K_RETURN or event.key == K_KP_ENTER:
                         if self.currentButton == 0:
-                            Game(self.screen, self.mainClock, width, height)
-                        else:
+                            Game(self.screen, self.mainClock, width,
+                         height, 'maps/map.txt', map_textures1, 'audios/nivel1.mp3')
+                        elif self.currentButton == 1:
+                            Game(self.screen, self.mainClock, width,
+                            height, 'maps/map1.txt', map_textures2, 'audios/nivel2.mp3')
+                        elif self.currentButton == 2:
+                            Game(self.screen, self.mainClock, width, height, 'maps/map2.txt', map_textures3, 'audios/nivel2.mp3')
+                        elif self.currentButton == 3:
                             pygame.quit()
                             sys.exit()
 
@@ -128,4 +182,8 @@ class Menu(object):
                     self.mouse_hover = True
 
             pygame.display.update()
-            self.mainClock.tick(60)
+            self.mainClock.tick(80)
+
+
+if __name__ == '__main__':
+    Menu()
