@@ -184,6 +184,3 @@ class Menu(object):
             pygame.display.update()
             self.mainClock.tick(80)
 
-
-if __name__ == '__main__':
-    Menu()
